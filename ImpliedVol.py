@@ -29,7 +29,8 @@ def main():
     #next(reader, None)
     #securities = list(reader)
     #f.close()
-    securities = pd.read_csv("C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\instruments.csv")
+    securities = pd.read_csv("C:\\Users\\guest2\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\instruments.csv")
+    securities.set_index('Symbol')
     
     #read price data
     #f = open("C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\marketdata.csv", "r")
@@ -37,13 +38,29 @@ def main():
     #next(reader, None)
     #market_data = list(reader)
     #f.close()
-    market_data = pd.read_csv("C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\marketdata.csv")
-    market_data.setIndex('LocalTime')
+    market_data = pd.read_csv("C:\\Users\\guest2\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\marketdata.csv")
+    market_data.set_index('LocalTime')
+    market_data['LocalTime'] = market_data['LocalTime'].apply(lambda x: 
+                                    dt.datetime.strptime(x,'%Y-%b-%d %I:%M:%S.%f'))
+    market_data = market_data.sort_values('LocalTime')
+
+    data31 = market_data[(market_data['LocalTime'] < dt.datetime(2016, 2, 16, 9, 31, 0, 0))]
+    data32 = market_data[(market_data['LocalTime'] < dt.datetime(2016, 2, 16, 9, 32, 0, 0))]
+    data33 = market_data[(market_data['LocalTime'] < dt.datetime(2016, 2, 16, 9, 33, 0, 0))]
+
+    #data31 = data31.groupby("Symbol").apply(lambda d:d.loc[d.LocalTime.idxmax()])
+
+    data31 = data31[['LocalTime', 'Symbol', 'Last', 'Bid1', 'Ask1']].groupby('Symbol').last()
+
+    combined31 = pd.concat([securities, data31.reset_index()], axis=1)
     
+
     #print(securities)
     #print(market_data)
     # process data into 31, 32 & 33
 
+    #print(data31.reset_index())
+    print(combined31)
 
     # get most recent price for the minute
 
