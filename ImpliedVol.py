@@ -1,7 +1,9 @@
 import datetime as dt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.style.use('ggplot')
+
 from scipy.stats import norm
 
 def FullBlackScholesCall(S, X, r, t, vol, q):
@@ -182,19 +184,15 @@ def main():
 
     impliedVol33 = impliedVolPut.join(impliedVolCall.set_index('Strike'), on='Strike', how='left').sort_values('Strike')
 
-
     #save results to \31.csv", \32.csv", and \33.csv"
-    impliedVol31.to_csv('C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\31.csv', index=False)
-    impliedVol32.to_csv('C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\32.csv', index=False)
-    impliedVol33.to_csv('C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\33.csv', index=False)
+    impliedVol31.to_csv('C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\31.csv', index=False, na_rep='NaN')
+    impliedVol32.to_csv('C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\32.csv', index=False, na_rep='NaN')
+    impliedVol33.to_csv('C:\\Users\\James\\SkyDrive\\Documents\\HKU\\TechniquesInCompFin\\33.csv', index=False, na_rep='NaN')
 
     #create graphs
-    plt.figure(); impliedVol31.plot();
-
+    impliedVol31.plot()
+    
     #check for arbitrage?
-
-
-
 
 main()
 
